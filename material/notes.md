@@ -26,4 +26,4 @@ swim up assay - to test the motility of the sperms within the fluid. The semen i
 even after these we are left with ~1% of the original sperm count out of which we need to narrow it down to 100 - 1000. After this the embryologist has to manually select the sperm for injection.
 currently the WHO has some selection criteria including head length, circularity, presence or absence of vacuoles. Motility is currently assessed at sample level by CASA and visually by embryologist.
 current DNA integrity tests determine percentage of spems with fragmented DNA in the sample. but DNA quality is not currently considered for ART cycles. 
-with developments in machine learning algorithms 
+with developments in machine learning algorithms there is a lot of applications in computer vision. The machine learning algorithms can be used to establish potential correlation between morphology DNA integrity and protein expression. 
