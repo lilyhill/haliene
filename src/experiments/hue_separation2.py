@@ -1,4 +1,5 @@
 
+from traceback import FrameSummary
 import cv2
 import numpy as np
  
@@ -9,7 +10,7 @@ def nothing(x):
 
 
 def separate_living_sperms():
-    frame = cv2.imread('sample1.jpg')
+    frame = cv2.imread('images/input/sample1.jpg')
     # get current positions of the trackbars
     ilowH = 65
     ihighH = 156
@@ -26,12 +27,14 @@ def separate_living_sperms():
     # Apply the mask on the image to extract the original color
     frame = cv2.bitwise_and(frame, frame, mask=mask)
     cv2.imshow('image', frame)
-    cv2.imwrite('only_living.jpg', frame)
+    cv2.imwrite('images/output/only_living.jpg', frame)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('images/output/only_living_gray.jpg', gray)
+
     # Press q to exit
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
         exit()
-        
 
 if __name__ == '__main__':
     separate_living_sperms()    
