@@ -8,13 +8,15 @@ def cca():
     image = cv2.imread('images/input/only_living_inpainted.jpg')
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     thresh = cv2.threshold(gray, 0, 255,
-	cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
-    # cv2.imshow("thresh", thresh)
+	cv2.THRESH_BINARY)[1]
+    print("thresh", thresh, thresh.shape)
+    cv2.imshow("thresh", thresh)
+    cv2.waitKey(0)
 
     output = cv2.connectedComponentsWithStats(
 	thresh, 4, cv2.CV_32S)
     (numLabels, labels, stats, centroids) = output
-    print("output", output, centroids)
+    # print("output", output, centroids)
     for i in range(0, numLabels):
         # if this is the first component then we examine the
         # *background* (typically we would just ignore this
@@ -35,6 +37,9 @@ def cca():
         w = stats[i, cv2.CC_STAT_WIDTH]
         h = stats[i, cv2.CC_STAT_HEIGHT]
         area = stats[i, cv2.CC_STAT_AREA]
+        print("area", area)
+        if area < 5000:
+            continue
         (cX, cY) = centroids[i]
         
         output = image.copy()
