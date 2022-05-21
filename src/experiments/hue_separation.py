@@ -17,7 +17,7 @@ cv2.createTrackbar('highS','image',255,255,nothing)
  
 cv2.createTrackbar('lowV','image',0,255,nothing)
 cv2.createTrackbar('highV','image',255,255,nothing)
-prev_frame = cv2.imread('sample1.jpg')
+prev_frame = cv2.imread('images/input/sample1.jpg')
 i = 0
 while(True):
     
@@ -30,13 +30,13 @@ while(True):
     ilowV = cv2.getTrackbarPos('lowV', 'image')
     ihighV = cv2.getTrackbarPos('highV', 'image')
     
-    if i % 1000000000:
-        print("ilowH", ilowH )
-        print("ihighH", ihighH )
-        print("ilowS", ilowS )
-        print("ihighS", ihighS )
-        print("ilowV", ilowV )
-        print("ihighV", ihighV )
+    # if i % 1000000000:
+    #     print("ilowH", ilowH )
+    #     print("ihighH", ihighH )
+    #     print("ilowS", ilowS )
+    #     print("ihighS", ihighS )
+    #     print("ilowV", ilowV )
+    #     print("ihighV", ihighV )
     # print('ilows', ilowS)
     # convert color to hsv because it is easy to track colors in this color model
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)

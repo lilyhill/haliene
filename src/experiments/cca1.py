@@ -10,6 +10,7 @@ def cca():
     thresh = cv2.threshold(gray, 0, 255,
 	cv2.THRESH_BINARY)[1]
     print("thresh", thresh, thresh.shape)
+    cv2.imwrite("images/output/only_living_mask.jpg", thresh)
     cv2.imshow("thresh", thresh)
     cv2.waitKey(0)
 

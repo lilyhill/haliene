@@ -16,9 +16,11 @@ def inpainting(input_img_path, radius = 3, method = None):
     print("mask", mask.shape, type(mask))
     output = cv2.inpaint(image, mask, radius, flags=flags)
     cv2.imshow("Image", image)
+    cv2.waitKey(0)
     cv2.imshow("Mask", mask)
+    cv2.waitKey(0)
     cv2.imshow("Output", output)
     cv2.waitKey(0)
 
 if __name__ == '__main__':
-    inpainting(input_img_path='images/input/only_living.jpg')    
+    inpainting(input_img_path='images/input/only_living.jpg', radius=20)    
