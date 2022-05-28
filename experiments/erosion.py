@@ -22,6 +22,7 @@ def remove_living():
 
     no_living_thresh = cv2.bitwise_or(no_living_thresh_with_black_gaps, only_living_mask2, only_living_mask)
     show("no_living_threshold", no_living_thresh)
+    
 def main():
     remove_living()    
 
