@@ -81,9 +81,9 @@ def main():
     cv2.imwrite(full_img_binary, full_img_binary_img)
     asds_mask = cv2.imread('../images/output/asds_thresh.jpg')
     asds_mask = cv2.cvtColor(asds_mask, cv2.COLOR_BGR2GRAY)
-    show("asds_mask", asds_mask)
+    # show("asds_mask", asds_mask)
     dustful = cv2.bitwise_or(full_img_binary_img, asds_mask, asds_mask)
-    show("dustful", dustful)
+    # show("dustful", dustful)
     dustful = cv2.bitwise_not(dustful)
     cv2.imwrite("../images/output/bdsdds.jpg", dustful)
 
@@ -92,27 +92,27 @@ def main():
 
     ## morphological operations on bdds
     eroded = erode(dustful)
-    show("erosion", eroded)
+    # show("erosion", eroded)
     cv2.imwrite("../images/output/bdds_eroded.jpg", eroded)
 
     bdds_dilated = dilate(eroded)
-    show("dilation", bdds_dilated)
+    # show("dilation", bdds_dilated)
     cv2.imwrite("../images/output/bdds.jpg", bdds_dilated)
 
 
     ## remove noise from asds_mask
     asds_mask = cv2.imread('../images/output/asds_thresh.jpg')
-    show("asds_mask", asds_mask)
+    # show("asds_mask", asds_mask)
     eroded = erode(asds_mask, kernelsize=6, iterations=3)
-    show("erosion1", eroded)
+    # show("erosion1", eroded)
     cv2.imwrite("../images/output/asds_mask_eroded.jpg", eroded)
 
     dilated = dilate(eroded, kernelsize=6, iterations=8)
-    show("dilation1", dilated)
+    # show("dilation1", dilated)
     cv2.imwrite("../images/output/asds_mask_dilated.jpg", dilated)
 
     asds_mask_clean = cv2.bitwise_and(asds_mask, dilated, asds_mask)
-    show("asds_mask_clean", asds_mask_clean)
+    # show("asds_mask_clean", asds_mask_clean)
     cv2.imwrite("../images/output/asds_mask_clean.jpg", asds_mask_clean)
 
     ## club asds_mask_clean and bdds and form bddsas mask 
@@ -124,10 +124,12 @@ def main():
 
 
     ## use bddsas mask to create final dirtless image.
-
-
-
-
+    full_img_binary_img_thresh = cv2.bitwise_not(cv2.threshold(full_img_binary_img, 100, 255,
+	cv2.THRESH_BINARY)[1])
+    show("full_img_binary_img_thresh", full_img_binary_img_thresh)
+    dirtless = cv2.bitwise_and(full_img_binary_img_thresh, bddsas_mask, bddsas_mask)
+    show("dirtless", dirtless)
+    cv2.imwrite("../images/output/dirtless.jpg", dirtless)
     
 
     
