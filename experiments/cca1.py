@@ -13,7 +13,6 @@ def cca():
     cv2.imwrite("images/output/only_living_mask.jpg", thresh)
     cv2.imshow("thresh", thresh)
     cv2.waitKey(0)
-
     output = cv2.connectedComponentsWithStats(
 	thresh, 4, cv2.CV_32S)
     (numLabels, labels, stats, centroids) = output

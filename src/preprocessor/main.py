@@ -70,7 +70,44 @@ def dilate(eroded, kernelsize = 3, iterations = 10):
     kernel = np.ones((kernelsize, kernelsize),np.uint8)
     return cv2.dilate(eroded,kernel,iterations = iterations)
 
-
+def cca(thresh):
+    output = cv2.connectedComponentsWithStats(
+	thresh, 4, cv2.CV_32S)
+    (numLabels, labels, stats, centroids) = output
+    # print("output", output, centroids)
+    for i in range(0, numLabels):
+        # if this is the first component then we examine the
+        # *background* (typically we would just ignore this
+        # component in our loop)
+        if i == 0:
+            text = "examining component {}/{} (background)".format(
+                i + 1, numLabels)
+        # otherwise, we are examining an actual connected component
+        else:
+            text = "examining component {}/{}".format( i + 1, numLabels)
+        # print a status message update for the current connected
+        # component
+        print("[INFO] {}".format(text))
+        # extract the connected component statistics and centroid for
+        # the current label
+        x = stats[i, cv2.CC_STAT_LEFT]
+        y = stats[i, cv2.CC_STAT_TOP]
+        w = stats[i, cv2.CC_STAT_WIDTH]
+        h = stats[i, cv2.CC_STAT_HEIGHT]
+        area = stats[i, cv2.CC_STAT_AREA]
+        print("area", area)
+        if area < 5000:
+            continue
+        (cX, cY) = centroids[i]
+        
+        # output = thresh.copy()
+        # cv2.rectangle(output, (x, y), (x + w, y + h), (255, 255, 255), 3)
+        # cv2.circle(output, (int(cX), int(cY)), 4, (255, 255, 255), -1)
+        
+        
+        componentMask = (labels == i).astype("uint8") * 255
+        cv2.imshow("Connected Component", componentMask)
+        cv2.waitKey(0)
 
 def main():
     gray = hue_separate()
@@ -119,18 +156,22 @@ def main():
     print("asds", asds_mask_clean.shape, bdds_dilated.shape)
     asds_mask_clean_gray = cv2.cvtColor(asds_mask_clean, cv2.COLOR_BGR2GRAY)
     bddsas_mask = cv2.bitwise_or(asds_mask_clean_gray, bdds_dilated, bdds_dilated)
-    show("bddsas_mask", bddsas_mask)
+    # show("bddsas_mask", bddsas_mask)
     cv2.imwrite("../images/output/bddsas_mask.jpg", bddsas_mask)
 
 
     ## use bddsas mask to create final dirtless image.
     full_img_binary_img_thresh = cv2.bitwise_not(cv2.threshold(full_img_binary_img, 100, 255,
 	cv2.THRESH_BINARY)[1])
-    show("full_img_binary_img_thresh", full_img_binary_img_thresh)
+    # show("full_img_binary_img_thresh", full_img_binary_img_thresh)
     dirtless = cv2.bitwise_and(full_img_binary_img_thresh, bddsas_mask, bddsas_mask)
-    show("dirtless", dirtless)
+    # show("dirtless", dirtless)
     cv2.imwrite("../images/output/dirtless.jpg", dirtless)
+
+    ## apply cca and form bounding boxes around blobs. 
+    cca(dirtless)
     
+
 
     
 
