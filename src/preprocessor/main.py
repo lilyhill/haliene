@@ -97,7 +97,7 @@ def cca(thresh):
         h = stats[i, cv2.CC_STAT_HEIGHT]
         area = stats[i, cv2.CC_STAT_AREA]
         print("area", area)
-        if area < 600 or area > 30000:
+        if area < 500 or area > 30000:
             continue
         (cX, cY) = centroids[i]
         
@@ -105,9 +105,9 @@ def cca(thresh):
         cv2.rectangle(output_img, (x, y), (x + w, y + h), (255, 255, 255), 3)
         cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
-        componentMask = (labels == i).astype("uint8") * 255
-        cv2.imshow("Connected Component", componentMask)
-        cv2.waitKey(0)
+        # componentMask = (labels == i).astype("uint8") * 255
+        # cv2.imshow("Connected Component", componentMask)
+        # cv2.waitKey(0)
     return output_img
 
 
@@ -142,7 +142,7 @@ def main():
     ## remove noise from asds_mask
     asds_mask = cv2.imread('../images/output/asds_thresh.jpg')
     # show("asds_mask", asds_mask)
-    eroded = erode(asds_mask, kernelsize=6, iterations=3)
+    eroded = erode(asds_mask, kernelsize=6, iterations=2)
     # show("erosion1", eroded)
     cv2.imwrite("../images/output/asds_mask_eroded.jpg", eroded)
 
@@ -175,10 +175,5 @@ def main():
     cv2.imwrite("../images/output/ccaed_img.jpg", ccaed_img)
 
     
-
-
-    
-
-
 if __name__ == '__main__':
     main()
