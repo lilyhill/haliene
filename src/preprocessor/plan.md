@@ -29,6 +29,15 @@ Let us say we have 4 things
 
 Above steps are done and now we have a beautiful image with no dirt. (dirtless.jpg)
 
+## Crop
+Somewhere we need to do analysis only on circular region in the sample image (i.e. without the black area in sample that fills up space around microscope window)
+
+plan for that:
+1. threshold at 40 - ```_,thresh = cv2.threshold(gray,40,255,cv2.THRESH_BINARY)```
+2. convert it to rgb and inpaint the full image (because some sperm also become black)
+3. threshold again at much lower value than 40
+4. we have a mask that we have to use everywhere from then on. 
+
 ## Next Plan
 
 1. Now we are going to apply cca to the dirtless image and form bounding boxes.

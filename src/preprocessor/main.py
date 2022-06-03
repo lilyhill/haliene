@@ -51,7 +51,7 @@ def hue_separate():
     return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 def get_full_img_binary(gray):
-    thresh = cv2.threshold(gray, 0, 255,
+    thresh = cv2.threshold(gray, 20, 255,
 	cv2.THRESH_BINARY)[1]
     show("thresh", thresh)
     cv2.imwrite("../images/output/asds_thresh.jpg", thresh)
@@ -74,7 +74,8 @@ def cca(thresh):
     output = cv2.connectedComponentsWithStats(
 	thresh, 4, cv2.CV_32S)
     (numLabels, labels, stats, centroids) = output
-    # print("output", output, centroids)
+    output_img = INPUT_FRAME.copy()
+    print("centroids", centroids, len(centroids))
     for i in range(0, numLabels):
         # if this is the first component then we examine the
         # *background* (typically we would just ignore this
@@ -87,7 +88,7 @@ def cca(thresh):
             text = "examining component {}/{}".format( i + 1, numLabels)
         # print a status message update for the current connected
         # component
-        print("[INFO] {}".format(text))
+        # print("[INFO] {}".format(text))
         # extract the connected component statistics and centroid for
         # the current label
         x = stats[i, cv2.CC_STAT_LEFT]
@@ -96,18 +97,19 @@ def cca(thresh):
         h = stats[i, cv2.CC_STAT_HEIGHT]
         area = stats[i, cv2.CC_STAT_AREA]
         print("area", area)
-        if area < 5000:
+        if area < 600 or area > 30000:
             continue
         (cX, cY) = centroids[i]
         
-        # output = thresh.copy()
-        # cv2.rectangle(output, (x, y), (x + w, y + h), (255, 255, 255), 3)
-        # cv2.circle(output, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
+        cv2.rectangle(output_img, (x, y), (x + w, y + h), (255, 255, 255), 3)
+        cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
         componentMask = (labels == i).astype("uint8") * 255
         cv2.imshow("Connected Component", componentMask)
         cv2.waitKey(0)
+    return output_img
+
 
 def main():
     gray = hue_separate()
@@ -169,7 +171,9 @@ def main():
     cv2.imwrite("../images/output/dirtless.jpg", dirtless)
 
     ## apply cca and form bounding boxes around blobs. 
-    cca(dirtless)
+    ccaed_img = cca(dirtless)
+    cv2.imwrite("../images/output/ccaed_img.jpg", ccaed_img)
+
     
 
 
