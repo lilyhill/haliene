@@ -13,6 +13,7 @@ HUE_PARAMS = {
     'ilowV' : 0,
     'ihighV' : 189,
 }
+MARGIN = 10
 
 def show(name, img):
     cv2.imshow(name, img)
@@ -53,7 +54,7 @@ def hue_separate():
 def get_full_img_binary(gray):
     thresh = cv2.threshold(gray, 20, 255,
 	cv2.THRESH_BINARY)[1]
-    show("thresh", thresh)
+    # show("thresh", thresh)
     cv2.imwrite("../images/output/asds_thresh.jpg", thresh)
     mask = cv2.bitwise_not(thresh)
     input_gray = cv2.cvtColor(INPUT_FRAME, cv2.COLOR_BGR2GRAY)
@@ -96,12 +97,15 @@ def cca(thresh):
         w = stats[i, cv2.CC_STAT_WIDTH]
         h = stats[i, cv2.CC_STAT_HEIGHT]
         area = stats[i, cv2.CC_STAT_AREA]
-        print("area", area)
+        # print("area", area)
         if area < 500 or area > 30000:
             continue
         (cX, cY) = centroids[i]
         
-        
+        x -= int(MARGIN/2)
+        y -= int(MARGIN/2)
+        w += MARGIN
+        h += MARGIN
         cv2.rectangle(output_img, (x, y), (x + w, y + h), (255, 255, 255), 3)
         cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
