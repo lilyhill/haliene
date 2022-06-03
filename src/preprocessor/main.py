@@ -2,6 +2,7 @@
 from traceback import FrameSummary
 import cv2
 import numpy as np
+import uuid
 
 INPUT_IMG = '../images/input/sample1.jpg'
 INPUT_FRAME = cv2.imread(INPUT_IMG)
@@ -76,7 +77,7 @@ def cca(thresh):
 	thresh, 4, cv2.CV_32S)
     (numLabels, labels, stats, centroids) = output
     output_img = INPUT_FRAME.copy()
-    print("centroids", centroids, len(centroids))
+    # print("centroids", centroids, len(centroids))
     for i in range(0, numLabels):
         # if this is the first component then we examine the
         # *background* (typically we would just ignore this
@@ -108,6 +109,12 @@ def cca(thresh):
         h += MARGIN
         cv2.rectangle(output_img, (x, y), (x + w, y + h), (255, 255, 255), 3)
         cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
+        
+        ## save the crop
+        # make a UUID based on the host address and current time
+        uuidOne = uuid.uuid1()
+        crop = output_img[y:y+h,x:x+w]
+        cv2.imwrite('../images/output/ml_data/unlabelled/'+str(uuidOne)+'.jpg',crop)
         
         # componentMask = (labels == i).astype("uint8") * 255
         # cv2.imshow("Connected Component", componentMask)
