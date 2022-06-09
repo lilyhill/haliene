@@ -77,7 +77,8 @@ def cca(thresh):
 	thresh, 4, cv2.CV_32S)
     (numLabels, labels, stats, centroids) = output
     output_img = INPUT_FRAME.copy()
-    # print("centroids", centroids, len(centroids))
+    bigCount = 0
+    print("centroids", centroids, len(centroids))
     for i in range(0, numLabels):
         # if this is the first component then we examine the
         # *background* (typically we would just ignore this
@@ -108,17 +109,21 @@ def cca(thresh):
         w += MARGIN
         h += MARGIN
         cv2.rectangle(output_img, (x, y), (x + w, y + h), (255, 255, 255), 3)
-        cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
+        cv2.imshow("sperm thing", output_img)
+        cv2.waitKey(0)
+        # cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
         ## save the crop
         # make a UUID based on the host address and current time
         uuidOne = uuid.uuid1()
         crop = output_img[y:y+h,x:x+w]
-        cv2.imwrite('../images/output/ml_data/unlabelled/'+str(uuidOne)+'.jpg',crop)
+        # cv2.imwrite('../images/output/ml_data/unlabelled/'+str(uuidOne)+'.jpg',crop)
         
         # componentMask = (labels == i).astype("uint8") * 255
         # cv2.imshow("Connected Component", componentMask)
         # cv2.waitKey(0)
+        bigCount += 1
+    print("bigCount", bigCount)
     return output_img
 
 
