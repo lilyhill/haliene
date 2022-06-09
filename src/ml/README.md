@@ -1,0 +1,1 @@
+Used [this](https://www.youtube.com/watch?v=6W8pjnW65Q8) to install tensorflow in m1 mac.
