@@ -49,14 +49,6 @@ def get_dustful(preprocessor_runtime: PreProcessor, image: Image):
 
     if preprocessor_runtime.should_debug(image.name):
         show('dustful' + image.name, dustful)
-        
-
-    # # asds_mask = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
-    # dustful = cv2.bitwise_or(only_dust_img_binary, hue_highlighted, mask = hue_highlighted)
-    # dustful = cv2.bitwise_not(dustful)
-
-    # if preprocessor_runtime.should_debug(image.name):
-    #     show('dustful ' + image.name, dustful)
     
     return Image(
         frame=dustful,
@@ -71,29 +63,6 @@ def get_dustful(preprocessor_runtime: PreProcessor, image: Image):
         state = ProcessState.THRESOLDED,
         original_image=image.original_image
     )
-
-def get_dustless(preprocessor_runtime: PreProcessor, dustless_dustful_binary_image: Image, dustless_hue_seperated_binary_image: Image):
-
-
-    clean_image_frame = cv2.bitwise_and(dirtful_image.frame, only_big_blobby_mask.frame, mask = only_big_blobby_mask.frame)
-    if preprocessor_runtime.should_debug(dirtful_image.name):
-        show('form_dirtless ' + dirtful_image.name, clean_image_frame)
-
-    
-    full_clean_image_frame = cv2.bitwise_or(clean_image_frame, only_big_dusty_mask.frame, mask = only_big_dusty_mask.frame)
-    if preprocessor_runtime.should_debug(dirtful_image.name):
-        show('form_dirtless2 ' + dirtful_image.name, full_clean_image_frame)
-    
-
-
-
-    full_img_binary_img_thresh = cv2.bitwise_not(only_dust_image.frame)
-    if preprocessor_runtime.should_debug(dirtful_image.name):
-        show('full_img_binary_img_thresh ' + dirtful_image.name, full_img_binary_img_thresh)
-    dirtless = cv2.bitwise_and(full_img_binary_img_thresh, full_clean_image_frame, mask = full_clean_image_frame)
-    if preprocessor_runtime.should_debug(dirtful_image.name):
-        show('dirtless ' + dirtful_image.name, dirtless)
-
 
 def inpainting(input_img_path, mask_img_path, radius = 3, method = None):
     flags = cv2.INPAINT_TELEA
