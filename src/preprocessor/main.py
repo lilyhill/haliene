@@ -1,11 +1,10 @@
-
-import cv2
-import os
-
-
 from Image import Image
 from PreProcessor import PreProcessor
-from common_ops import hue_separate, get_full_img_binary
+from common_ops import hue_separate, get_dustful
+from morphological import reduce_noise_from_dustful_image, reduce_noise_from_hue_highlighted_image
+from utils import show
+import cv2
+
 
 IMAGES_DIR = '../images'
 INPUT_DIR = IMAGES_DIR + '/input'
@@ -13,38 +12,9 @@ OUTPUT_DIR = IMAGES_DIR + '/output'
 
 
 # def preprocess_and_save(img_path, output_dir):
-#     img_frame = cv2.imread(img_path)
-#     gray = hue_separate(img_frame)
-#     full_img_binary_img = get_full_img_binary(gray)
-#     # full_img_binary_img = cv2.cvtColor(full_img_binary_img, cv2.COLOR_BGR2GRAY)
-#     cv2.imwrite(full_img_binary, full_img_binary_img)
-#     asds_mask = cv2.cvtColor(asds_mask, cv2.COLOR_BGR2GRAY)
-#     # show("asds_mask", asds_mask)
-#     dustful = cv2.bitwise_or(full_img_binary_img, asds_mask, asds_mask)
-#     # show("dustful", dustful)
-#     dustful = cv2.bitwise_not(dustful)
-
-
-#     # infill = inpainting(bssdds, asds_mask)
-
-#     ## morphological operations on bdds
-#     eroded = erode(dustful)
-#     # show("erosion", eroded)
-
-#     bdds_dilated = dilate(eroded)
-#     # show("dilation", bdds_dilated)
 
 
 #     ## remove noise from asds_mask
-#     asds_mask = cv2.imread('../images/output/asds_thresh.jpg')
-#     # show("asds_mask", asds_mask)
-#     eroded = erode(asds_mask, kernelsize=6, iterations=2)
-#     # show("erosion1", eroded)
-#     cv2.imwrite("../images/output/asds_mask_eroded.jpg", eroded)
-
-#     dilated = dilate(eroded, kernelsize=6, iterations=8)
-#     # show("dilation1", dilated)
-#     cv2.imwrite("../images/output/asds_mask_dilated.jpg", dilated)
 
 #     asds_mask_clean = cv2.bitwise_and(asds_mask, dilated, asds_mask)
 #     # show("asds_mask_clean", asds_mask_clean)
@@ -82,10 +52,22 @@ def test_hue_separation(preprocessor_runtime, image):
 def test():
     preprocessor_runtime = PreProcessor(input_dir=INPUT_DIR, output_dir=OUTPUT_DIR, debug=True, debug_imgname_allowlist=['sample1'])
     img_path = '/Users/nilinswap/forgit/others/haliene/src/images/input/sample1.jpg'
-    image = Image(file_path=img_path)
-    blobby_image = hue_separate(preprocessor_runtime=preprocessor_runtime, image=image)
-    dirtsomething = get_full_img_binary(preprocessor_runtime, blobby_image)
-    return dirtsomething
+    orig_image = Image(file_path=img_path)
+    input_image = Image(file_path=img_path)
+    input_image.original_image = orig_image ## Huge Red Flag -> just kill this thing. why is Image(file_path=img_path) repeated? THere is a leakage because if am doing self.original_image=self. latter was required so that hue_seperation can work with any image (and not just original_image) (see use of self.original_image there) and former is there so there to make it possible for hue_separation to work for original_image. i.e. former is because of latter.
+    hue_separated_gray_image = hue_separate(preprocessor_runtime=preprocessor_runtime, image=input_image)
+    dustful_image, hue_highligted, input_binary = get_dustful(preprocessor_runtime, hue_separated_gray_image)
+    
+    dustless_dustful_binary_image = reduce_noise_from_dustful_image(preprocessor_runtime=preprocessor_runtime, dustful_image = dustful_image)
+    dustless_hue_highlighted_binary_image = reduce_noise_from_hue_highlighted_image(preprocessor_runtime=preprocessor_runtime, hue_highlighted=hue_highligted)
+    
+    print("from here")
+    show("dustless_dustful_binary_image.frame", dustless_dustful_binary_image.frame)
+    show("dustless_hue_highlighted_binary_image.frame", dustless_hue_highlighted_binary_image.frame)
+    dirtless_image = cv2.bitwise_or(dustless_dustful_binary_image.frame, dustless_hue_highlighted_binary_image.frame, mask=input_binary.frame)
+
+    show("dirtless_image", dirtless_image)
+    return dirtless_image
 
     
 if __name__ == '__main__':

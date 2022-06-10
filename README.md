@@ -17,3 +17,12 @@ just run `python whatever.py`
 
 1. in erosion.py, we first cleared all the living ones and it leaves black holes for living ones. We tried filling it up with inpaint but result is still a blur. (without_living.jpg) 
 
+
+
+## REAL TODOs
+
+1. We are currently creating a lot of image objects and we don't need them. Ideally, there should only be one original image and other image that just changes state and when it changes state it modifies its own frame. We should do it. 
+
+I did it but left a very bad code behind. Please fix it. description is there in main.py
+
+Also should I create new object for image or should I change and return it?

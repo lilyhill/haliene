@@ -3,6 +3,7 @@ from utils import fetch_name
 from os.path import exists
 import cv2
 
+
 class Image:
     def __init__(self, name: str = None, original_image = None, state: ProcessState = ProcessState.default(), file_path: str = None, frame = None):
         if state.value == ProcessState.default() and not file_path and exists(file_path):
@@ -19,3 +20,5 @@ class Image:
         self.file_path = file_path
         if not self.file_path and ((not self.original_image) or (self.frame is None or self.name is None)):
             raise Exception('Image cons: both filepath and (original_image or frame) cant be none.')        
+        if not self.original_image: ## Huge danger zone. Please review
+            self.original_image = self

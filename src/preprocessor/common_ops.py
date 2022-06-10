@@ -17,39 +17,82 @@ def hue_separate(preprocessor_runtime: PreProcessor, image: Image) -> npt.ArrayL
     mask = cv2.inRange(hsv, lower_hsv, higher_hsv)
 
     # Apply the mask on the image to extract the original color
-    frame = cv2.bitwise_and(image.frame, image.frame, mask=mask)
-    
+    frame = cv2.cvtColor(cv2.bitwise_and(image.frame, image.frame, mask=mask), cv2.COLOR_BGR2GRAY)
     if preprocessor_runtime.should_debug(image.name):
         show('hue_separate ' + image.name, frame)
     
     return Image(
-        frame=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY),
+        frame=frame,
         state = ProcessState.HUE_SEPARATED,
-        original_image=image
+        original_image=image.original_image
     )
 
 
-def get_full_img_binary(preprocessor_runtime: PreProcessor, image: Image):
-    thresh = cv2.threshold(image.frame, 20, 255,
+def get_dustful(preprocessor_runtime: PreProcessor, image: Image):
+    hue_highlighted = cv2.threshold(image.frame, 20, 255,
 	cv2.THRESH_BINARY)[1]
 
     if preprocessor_runtime.should_debug(image.name):
-        show('thresholded on 20 ' + image.name, thresh)
+        show('thresholded on 20 ' + image.name, hue_highlighted)
 
-    mask = cv2.bitwise_not(thresh)
-    input_gray = cv2.cvtColor(image.original_image.frame, cv2.COLOR_BGR2GRAY)
-    only_dust_img = cv2.bitwise_and(input_gray, mask, mask)
-    only_dust_img_binary = cv2.threshold(only_dust_img, 100, 255,
+    remove_hue_highlighted_mask = cv2.bitwise_not(hue_highlighted)
+    input_gray_naturally_inverted = cv2.cvtColor(image.original_image.frame, cv2.COLOR_BGR2GRAY)
+    input_naturally_inverted_binary = cv2.threshold(input_gray_naturally_inverted, 100, 255,
 	cv2.THRESH_BINARY)[1]
+    input_binary = cv2.bitwise_not(input_naturally_inverted_binary)
 
     if preprocessor_runtime.should_debug(image.name):
-        show('only_dust_img_binary ' + image.name, only_dust_img_binary)
+        show('input_binary ' + image.name, input_binary)
+    
+    ## Full image - big blobs formed from hue seperation = dusty image
+    dustful = cv2.bitwise_and(input_binary, remove_hue_highlighted_mask, mask = remove_hue_highlighted_mask)  
 
-    return only_dust_img_binary
+    if preprocessor_runtime.should_debug(image.name):
+        show('dustful' + image.name, dustful)
+        
+
+    # # asds_mask = cv2.cvtColor(thresh, cv2.COLOR_BGR2GRAY)
+    # dustful = cv2.bitwise_or(only_dust_img_binary, hue_highlighted, mask = hue_highlighted)
+    # dustful = cv2.bitwise_not(dustful)
+
+    # if preprocessor_runtime.should_debug(image.name):
+    #     show('dustful ' + image.name, dustful)
+    
+    return Image(
+        frame=dustful,
+        state = ProcessState.DUSTFUL,
+        original_image=image.original_image
+    ), Image(
+        frame=hue_highlighted,
+        state = ProcessState.HUE_HIGHLIGHTED,
+        original_image=image.original_image
+    ), Image(
+        frame=input_binary,
+        state = ProcessState.THRESOLDED,
+        original_image=image.original_image
+    )
+
+def get_dustless(preprocessor_runtime: PreProcessor, dustless_dustful_binary_image: Image, dustless_hue_seperated_binary_image: Image):
 
 
-    kernel = np.ones((kernelsize, kernelsize),np.uint8)
-    return cv2.dilate(eroded,kernel,iterations = iterations)
+    clean_image_frame = cv2.bitwise_and(dirtful_image.frame, only_big_blobby_mask.frame, mask = only_big_blobby_mask.frame)
+    if preprocessor_runtime.should_debug(dirtful_image.name):
+        show('form_dirtless ' + dirtful_image.name, clean_image_frame)
+
+    
+    full_clean_image_frame = cv2.bitwise_or(clean_image_frame, only_big_dusty_mask.frame, mask = only_big_dusty_mask.frame)
+    if preprocessor_runtime.should_debug(dirtful_image.name):
+        show('form_dirtless2 ' + dirtful_image.name, full_clean_image_frame)
+    
+
+
+
+    full_img_binary_img_thresh = cv2.bitwise_not(only_dust_image.frame)
+    if preprocessor_runtime.should_debug(dirtful_image.name):
+        show('full_img_binary_img_thresh ' + dirtful_image.name, full_img_binary_img_thresh)
+    dirtless = cv2.bitwise_and(full_img_binary_img_thresh, full_clean_image_frame, mask = full_clean_image_frame)
+    if preprocessor_runtime.should_debug(dirtful_image.name):
+        show('dirtless ' + dirtful_image.name, dirtless)
 
 
 def inpainting(input_img_path, mask_img_path, radius = 3, method = None):
