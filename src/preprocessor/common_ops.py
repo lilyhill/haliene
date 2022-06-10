@@ -23,16 +23,14 @@ def hue_separate(preprocessor_runtime: PreProcessor, image: Image) -> npt.ArrayL
         show('hue_separate ' + image.name, frame)
     
     return Image(
-        original_image_path=image.original_image_path,
         frame=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY),
-        name = image.name,
-        original_frame = image.original_frame,
         state = ProcessState.HUE_SEPARATED,
+        original_image=image
     )
 
 
 def get_full_img_binary(preprocessor_runtime: PreProcessor, image: Image):
-    thresh = cv2.threshold(image, 20, 255,
+    thresh = cv2.threshold(image.frame, 20, 255,
 	cv2.THRESH_BINARY)[1]
 
     if preprocessor_runtime.should_debug(image.name):
@@ -43,6 +41,10 @@ def get_full_img_binary(preprocessor_runtime: PreProcessor, image: Image):
     only_dust_img = cv2.bitwise_and(input_gray, mask, mask)
     only_dust_img_binary = cv2.threshold(only_dust_img, 100, 255,
 	cv2.THRESH_BINARY)[1]
+
+    if preprocessor_runtime.should_debug(image.name):
+        show('only_dust_img_binary ' + image.name, only_dust_img_binary)
+
     return only_dust_img_binary
 
 

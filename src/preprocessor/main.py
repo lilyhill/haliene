@@ -5,7 +5,7 @@ import os
 
 from Image import Image
 from PreProcessor import PreProcessor
-from common_ops import hue_separate
+from common_ops import hue_separate, get_full_img_binary
 
 IMAGES_DIR = '../images'
 INPUT_DIR = IMAGES_DIR + '/input'
@@ -70,20 +70,23 @@ OUTPUT_DIR = IMAGES_DIR + '/output'
 #     ccaed_img = cca(dirtless)
 #     cv2.imwrite("../images/output/ccaed_img.jpg", ccaed_img)
 
-def test_hue_separation():
-    preprocessor_runtime = PreProcessor(input_dir=INPUT_DIR, output_dir=OUTPUT_DIR, debug=True, debug_imgname_allowlist=['sample1'])
-    img_path = '/Users/nilinswap/forgit/others/haliene/src/images/input/sample1.jpg'
-    image = Image(original_image_path=img_path)
-    print('image', image)
+def test_hue_separation(preprocessor_runtime, image):
     blobby_image = hue_separate(preprocessor_runtime=preprocessor_runtime, image=image)
     print(type(blobby_image), blobby_image)
     return blobby_image
 
 
 
-def main():
-    test_hue_separation()
+
+
+def test():
+    preprocessor_runtime = PreProcessor(input_dir=INPUT_DIR, output_dir=OUTPUT_DIR, debug=True, debug_imgname_allowlist=['sample1'])
+    img_path = '/Users/nilinswap/forgit/others/haliene/src/images/input/sample1.jpg'
+    image = Image(file_path=img_path)
+    blobby_image = hue_separate(preprocessor_runtime=preprocessor_runtime, image=image)
+    dirtsomething = get_full_img_binary(preprocessor_runtime, blobby_image)
+    return dirtsomething
 
     
 if __name__ == '__main__':
-    main()
+    test()
