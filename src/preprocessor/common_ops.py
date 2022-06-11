@@ -7,6 +7,7 @@ from constants import HUE_PARAMS
 from utils import show
 from constants import MARGIN, MAX_CCA_AREA, MIN_CCA_AREA
 import numpy.typing as npt
+import os
 
 
 def hue_separate(preprocessor_runtime: PreProcessor, image: Image) -> npt.ArrayLike:
@@ -83,6 +84,11 @@ def cca(preprocessor_runtime: PreProcessor, binary_image: Image):
     output_img_frame = binary_image.original_image.frame.copy()
     bigCount = 0
     print("centroids", centroids, len(centroids))
+    crop_images_dir = preprocessor_runtime.get_mldata_unlabelled_dir() + '/' + binary_image.original_image.name
+    try:
+        os.mkdir(crop_images_dir)
+    except Exception as e:
+        raise Exception("error while creating folder in cca " + str(e))
     for i in range(0, numLabels):
         # if this is the first component then we examine the
         # *background* (typically we would just ignore this
@@ -113,10 +119,12 @@ def cca(preprocessor_runtime: PreProcessor, binary_image: Image):
         # cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
         ## save the crop
-        cropped_image_name = preprocessor_runtime.get_mldata_unlabelled_dir() + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
+        cropped_image_name = crop_images_dir + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
         print('cropped_image_name', cropped_image_name)
         crop = binary_image.original_image.frame[y:y+h,x:x+w]
-        cv2.imwrite(cropped_image_name, crop)
+        if not cv2.imwrite(cropped_image_name, crop):
+            raise Exception("could not write cropped image to " + cropped_image_name)
+        
         bigCount += 1
     print("bigCount", bigCount)
     return Image(
