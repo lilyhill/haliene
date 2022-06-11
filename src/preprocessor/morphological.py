@@ -2,11 +2,10 @@ import numpy as np
 import cv2
 from Image import Image
 from ProcessState import ProcessState
-from PreProcessor import PreProcessor
 from utils import show
 
 
-def erode(preprocessor_runtime: PreProcessor, image: Image, kernelsize = 8, iterations = 2):
+def erode(preprocessor_runtime, image: Image, kernelsize = 8, iterations = 2):
     kernel = np.ones((kernelsize, kernelsize), np.uint8)
     frame = cv2.erode(image.frame, kernel, iterations = iterations)
     if preprocessor_runtime.should_debug(image.name):
@@ -18,7 +17,7 @@ def erode(preprocessor_runtime: PreProcessor, image: Image, kernelsize = 8, iter
     )
 
 
-def dilate(preprocessor_runtime: PreProcessor, image, kernelsize = 3, iterations = 10):
+def dilate(preprocessor_runtime, image, kernelsize = 3, iterations = 10):
     kernel = np.ones((kernelsize, kernelsize),np.uint8)
     frame = cv2.dilate(image.frame, kernel, iterations = iterations)
     if preprocessor_runtime.should_debug(image.name):
@@ -30,7 +29,7 @@ def dilate(preprocessor_runtime: PreProcessor, image, kernelsize = 3, iterations
     )
 
 
-def reduce_noise_from_dustful_image(preprocessor_runtime: PreProcessor, dustful_image: Image):
+def reduce_noise_from_dustful_image(preprocessor_runtime, dustful_image: Image):
     eroded_dustful_image = erode(preprocessor_runtime=preprocessor_runtime, image=dustful_image)
     dilated_dustful_image = dilate(preprocessor_runtime=preprocessor_runtime, image=eroded_dustful_image)
     only_bigdusty_dustful_frame = cv2.bitwise_and(dustful_image.frame, dilated_dustful_image.frame, mask=dilated_dustful_image.frame)
@@ -43,7 +42,7 @@ def reduce_noise_from_dustful_image(preprocessor_runtime: PreProcessor, dustful_
     )
 
 
-def reduce_noise_from_hue_highlighted_image(preprocessor_runtime: PreProcessor, hue_highlighted: Image):
+def reduce_noise_from_hue_highlighted_image(preprocessor_runtime, hue_highlighted: Image):
     eroded_hue_highlighted = erode(preprocessor_runtime=preprocessor_runtime, image=hue_highlighted, kernelsize=6, iterations=2)
     dilated_hue_highlighted = dilate(preprocessor_runtime=preprocessor_runtime, image=eroded_hue_highlighted, kernelsize=6, iterations=8)
     dustless_hue_highlighted_frame = cv2.bitwise_and(hue_highlighted.frame, dilated_hue_highlighted.frame, mask=dilated_hue_highlighted.frame)

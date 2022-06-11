@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 from Image import Image
-from PreProcessor import PreProcessor
 from ProcessState import ProcessState
 from constants import HUE_PARAMS
 from utils import show
@@ -10,7 +9,7 @@ import numpy.typing as npt
 import os
 
 
-def hue_separate(preprocessor_runtime: PreProcessor, image: Image) -> npt.ArrayLike:
+def hue_separate(preprocessor_runtime, image: Image) -> npt.ArrayLike:
     hsv = cv2.cvtColor(image.frame, cv2.COLOR_BGR2HSV)
     lower_hsv = np.array([HUE_PARAMS['ilowH'], HUE_PARAMS['ilowS'], HUE_PARAMS['ilowV']])
     higher_hsv = np.array([HUE_PARAMS['ihighH'], HUE_PARAMS['ihighS'], HUE_PARAMS['ihighV']])
@@ -30,7 +29,7 @@ def hue_separate(preprocessor_runtime: PreProcessor, image: Image) -> npt.ArrayL
     )
 
 
-def get_dustful(preprocessor_runtime: PreProcessor, image: Image):
+def get_dustful(preprocessor_runtime, image: Image):
     hue_highlighted = cv2.threshold(image.frame, 20, 255,
 	cv2.THRESH_BINARY)[1]
 
@@ -78,7 +77,7 @@ def inpainting(input_img_path, mask_img_path, radius = 3, method = None):
     return output
 
 
-def cca(preprocessor_runtime: PreProcessor, binary_image: Image):
+def cca(preprocessor_runtime, binary_image: Image):
     (numLabels, _, stats, centroids) = cv2.connectedComponentsWithStats(
 	binary_image.frame, 4, cv2.CV_32S)
     output_img_frame = binary_image.original_image.frame.copy()
@@ -87,6 +86,9 @@ def cca(preprocessor_runtime: PreProcessor, binary_image: Image):
     crop_images_dir = preprocessor_runtime.get_mldata_unlabelled_dir() + '/' + binary_image.original_image.name
     try:
         os.mkdir(crop_images_dir)
+    except FileExistsError as fee:
+        print("fee", str(fee))
+        pass
     except Exception as e:
         raise Exception("error while creating folder in cca " + str(e))
     for i in range(0, numLabels):
@@ -119,11 +121,12 @@ def cca(preprocessor_runtime: PreProcessor, binary_image: Image):
         # cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
         ## save the crop
-        cropped_image_name = crop_images_dir + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
-        print('cropped_image_name', cropped_image_name)
-        crop = binary_image.original_image.frame[y:y+h,x:x+w]
-        if not cv2.imwrite(cropped_image_name, crop):
-            raise Exception("could not write cropped image to " + cropped_image_name)
+        if preprocessor_runtime.should_crop_image:
+            cropped_image_name = crop_images_dir + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
+            print('cropped_image_name', cropped_image_name)
+            crop = binary_image.original_image.frame[y:y+h,x:x+w]
+            if not cv2.imwrite(cropped_image_name, crop):
+                raise Exception("could not write cropped image to " + cropped_image_name)
         
         bigCount += 1
     print("bigCount", bigCount)

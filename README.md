@@ -26,3 +26,5 @@ just run `python whatever.py`
 I did it but left a very bad code behind. Please fix it. description is there in main.py
 
 Also should I create new object for image or should I change and return it?
+
+Find a smart way to write Constructor which is not leaky on cases to initialize a valid instance. 
