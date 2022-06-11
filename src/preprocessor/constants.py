@@ -6,4 +6,6 @@ HUE_PARAMS = {
     'ilowV' : 0,
     'ihighV' : 189,
 }
-MARGIN = 10
+MARGIN = 50
+MIN_CCA_AREA = 500
+MAX_CCA_AREA = 30000

@@ -5,6 +5,7 @@ from PreProcessor import PreProcessor
 from ProcessState import ProcessState
 from constants import HUE_PARAMS
 from utils import show
+from constants import MARGIN, MAX_CCA_AREA, MIN_CCA_AREA
 import numpy.typing as npt
 
 
@@ -73,19 +74,13 @@ def inpainting(input_img_path, mask_img_path, radius = 3, method = None):
     mask = cv2.cvtColor(mask_img, cv2.COLOR_BGR2GRAY)
     print("mask", mask.shape, type(mask))
     output = cv2.inpaint(image, mask, radius, flags=flags)
-    # cv2.imshow("Image", image)
-    # cv2.waitKey(0)
-    # cv2.imshow("Mask", mask)
-    # cv2.waitKey(0)
-    # cv2.imshow("Output", output)
-    # cv2.waitKey(0)
+    return output
 
 
-def cca(thresh):
-    output = cv2.connectedComponentsWithStats(
-	thresh, 4, cv2.CV_32S)
-    (numLabels, labels, stats, centroids) = output
-    output_img = INPUT_FRAME.copy()
+def cca(preprocessor_runtime: PreProcessor, binary_image: Image):
+    (numLabels, _, stats, centroids) = cv2.connectedComponentsWithStats(
+	binary_image.frame, 4, cv2.CV_32S)
+    output_img_frame = binary_image.original_image.frame.copy()
     bigCount = 0
     print("centroids", centroids, len(centroids))
     for i in range(0, numLabels):
@@ -95,42 +90,37 @@ def cca(thresh):
         if i == 0:
             text = "examining component {}/{} (background)".format(
                 i + 1, numLabels)
-        # otherwise, we are examining an actual connected component
         else:
+            # otherwise, we are examining an actual connected component
             text = "examining component {}/{}".format( i + 1, numLabels)
-        # print a status message update for the current connected
-        # component
-        # print("[INFO] {}".format(text))
-        # extract the connected component statistics and centroid for
-        # the current label
+        
+        print("[INFO] {}".format(text))
+        
         x = stats[i, cv2.CC_STAT_LEFT]
         y = stats[i, cv2.CC_STAT_TOP]
         w = stats[i, cv2.CC_STAT_WIDTH]
         h = stats[i, cv2.CC_STAT_HEIGHT]
         area = stats[i, cv2.CC_STAT_AREA]
-        # print("area", area)
-        if area < 500 or area > 30000:
+        if area < MIN_CCA_AREA or area > MAX_CCA_AREA:
             continue
-        (cX, cY) = centroids[i]
+        # (cX, cY) = centroids[i]
         
         x -= int(MARGIN/2)
         y -= int(MARGIN/2)
         w += MARGIN
         h += MARGIN
-        cv2.rectangle(output_img, (x, y), (x + w, y + h), (255, 255, 255), 3)
-        cv2.imshow("sperm thing", output_img)
-        cv2.waitKey(0)
+        cv2.rectangle(output_img_frame, (x, y), (x + w, y + h), (255, 255, 255), 3)
         # cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
         ## save the crop
-        # make a UUID based on the host address and current time
-        uuidOne = uuid.uuid1()
-        crop = output_img[y:y+h,x:x+w]
-        # cv2.imwrite('../images/output/ml_data/unlabelled/'+str(uuidOne)+'.jpg',crop)
-        
-        # componentMask = (labels == i).astype("uint8") * 255
-        # cv2.imshow("Connected Component", componentMask)
-        # cv2.waitKey(0)
+        cropped_image_name = preprocessor_runtime.get_mldata_unlabelled_dir() + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
+        print('cropped_image_name', cropped_image_name)
+        crop = binary_image.original_image.frame[y:y+h,x:x+w]
+        cv2.imwrite(cropped_image_name, crop)
         bigCount += 1
     print("bigCount", bigCount)
-    return output_img
+    return Image(
+        frame=output_img_frame,
+        state = ProcessState.BOUNDING_BOXED,
+        original_image = binary_image.original_image
+    )

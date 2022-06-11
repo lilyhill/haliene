@@ -1,11 +1,12 @@
 from Image import Image
 from PreProcessor import PreProcessor
-from common_ops import hue_separate, get_dustful
+from ProcessState import ProcessState
+from common_ops import hue_separate, get_dustful, cca
 from morphological import reduce_noise_from_dustful_image, reduce_noise_from_hue_highlighted_image
 import cv2
 
 
-IMAGES_DIR = '../images'
+IMAGES_DIR = 'src/images'
 INPUT_DIR = IMAGES_DIR + '/input'
 OUTPUT_DIR = IMAGES_DIR + '/output'
 
@@ -21,9 +22,16 @@ def test():
     dustless_dustful_binary_image = reduce_noise_from_dustful_image(preprocessor_runtime=preprocessor_runtime, dustful_image = dustful_image)
     dustless_hue_highlighted_binary_image = reduce_noise_from_hue_highlighted_image(preprocessor_runtime=preprocessor_runtime, hue_highlighted=hue_highligted)
 
-    dirtless_image = cv2.bitwise_or(dustless_dustful_binary_image.frame, dustless_hue_highlighted_binary_image.frame, mask=input_binary.frame)
+    dirtless_image = Image(
+        frame = cv2.bitwise_or(dustless_dustful_binary_image.frame, dustless_hue_highlighted_binary_image.frame, mask=input_binary.frame),
+        state = ProcessState.DIRTLESS,
+        original_image = orig_image
+    )
 
-    return dirtless_image
+    ccaed_img = cca(preprocessor_runtime = preprocessor_runtime, binary_image = dirtless_image)
+    ccaed_img_path = preprocessor_runtime.output_dir + '/' + preprocessor_runtime.ccaed_subpath + '/' + 'ccaed_' + dirtless_image.name + '.jpg'
+    cv2.imwrite(ccaed_img_path, ccaed_img.frame)
+    return ccaed_img_path
 
     
 if __name__ == '__main__':

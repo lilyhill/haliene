@@ -9,6 +9,8 @@ class ProcessState(enum.Enum):
    ERODED = 'eroded'
    DILATED = 'dilated'
    MORPHED = 'morphed'
+   BOUNDING_BOXED = 'bounding-boxed'
+   DIRTLESS = 'dirtless'
    UNNAMED = 'unamed'
 
    def default():
