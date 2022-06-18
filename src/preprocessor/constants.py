@@ -6,6 +6,10 @@ HUE_PARAMS = {
     'ilowV' : 0,
     'ihighV' : 189,
 }
-MARGIN = 50
-MIN_CCA_AREA = 400
+MARGIN_DICT = {
+    'small_area_margin': 50,
+    'large_area_margin': 0,
+    'area_threshold': 500
+}
+MIN_CCA_AREA = 20
 MAX_CCA_AREA = 30000

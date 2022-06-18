@@ -4,9 +4,10 @@ from Image import Image
 from ProcessState import ProcessState
 from constants import HUE_PARAMS
 from utils import show
-from constants import MARGIN, MAX_CCA_AREA, MIN_CCA_AREA
+from constants import MARGIN_DICT, MAX_CCA_AREA, MIN_CCA_AREA
 import numpy.typing as npt
 import os
+import time
 
 
 def hue_separate(preprocessor_runtime, image: Image) -> npt.ArrayLike:
@@ -112,11 +113,14 @@ def cca(preprocessor_runtime, binary_image: Image):
         if area < MIN_CCA_AREA or area > MAX_CCA_AREA:
             continue
         # (cX, cY) = centroids[i]
-        
-        x -= int(MARGIN/2)
-        y -= int(MARGIN/2)
-        w += MARGIN
-        h += MARGIN
+        if area < MARGIN_DICT['area_threshold']:
+            margin = MARGIN_DICT['small_area_margin']
+        else:
+            margin = MARGIN_DICT['large_area_margin']
+        x -= int(margin/2)
+        y -= int(margin/2)
+        w += margin
+        h += margin
         cv2.rectangle(output_img_frame, (x, y), (x + w, y + h), (255, 255, 255), 3)
         # cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
         
@@ -125,8 +129,16 @@ def cca(preprocessor_runtime, binary_image: Image):
             cropped_image_name = crop_images_dir + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
             print('cropped_image_name', cropped_image_name)
             crop = binary_image.original_image.frame[y:y+h,x:x+w]
-            if not cv2.imwrite(cropped_image_name, crop):
-                raise Exception("could not write cropped image to " + cropped_image_name)
+            failure_count = 0
+            try:
+                while not cv2.imwrite(cropped_image_name, crop) and failure_count < 5:
+                    failure_count += 1
+                    time.sleep(1)
+                    print("sleeping", cropped_image_name)
+                if failure_count == 5:
+                    print("could not crop", cropped_image_name)
+            except Exception as e:
+                print("could not crop due to exception", cropped_image_name)
         
         bigCount += 1
     print("bigCount", bigCount)

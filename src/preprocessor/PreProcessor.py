@@ -27,11 +27,14 @@ class PreProcessor:
         return '/'.join([self.output_dir, self.mldata_subpath, self.unlabelled_subpath])
 
     def preprocess_all(self):
-        input_images = os.listdir(self.input_dir) if not self.debug else self.debug_imgname_allowlist
+        input_images = os.listdir(self.input_dir) if not self.debug else [f + '.jpg' for f in self.debug_imgname_allowlist]
         for f in input_images:
             img_path = os.path.join(self.input_dir, f)
             if os.path.isfile(img_path):
-                self.preprocess_single(img_path)                
+                try:
+                    self.preprocess_single(img_path)                
+                except Exception as e:
+                    print("eee " + img_path + ' ' + str(e))
 
     def preprocess_single(self, img_path: str):
         orig_image = Image(file_path=img_path)
