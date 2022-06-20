@@ -4,7 +4,7 @@ from Image import Image
 from ProcessState import ProcessState
 from constants import HUE_PARAMS
 from utils import show
-from constants import MARGIN_DICT, MAX_CCA_AREA, MIN_CCA_AREA
+from constants import MARGIN_DICT, MAX_CCA_AREA, MIN_CCA_AREA, SIZE_AREA_DICT
 import numpy.typing as npt
 import os
 import time
@@ -79,7 +79,7 @@ def inpainting(input_img_path, mask_img_path, radius = 3, method = None):
 
 
 def cca(preprocessor_runtime, binary_image: Image):
-    (numLabels, _, stats, centroids) = cv2.connectedComponentsWithStats(
+    (numLabels, labels, stats, centroids) = cv2.connectedComponentsWithStats(
 	binary_image.frame, 4, cv2.CV_32S)
     output_img_frame = binary_image.original_image.frame.copy()
     bigCount = 0
@@ -87,12 +87,16 @@ def cca(preprocessor_runtime, binary_image: Image):
     crop_images_dir = preprocessor_runtime.get_mldata_unlabelled_dir() + '/' + binary_image.original_image.name
     try:
         os.mkdir(crop_images_dir)
+        os.mkdir(crop_images_dir+'/big')
+        os.mkdir(crop_images_dir+'/medium')
+        os.mkdir(crop_images_dir+'/small')
     except FileExistsError as fee:
         print("fee", str(fee))
         pass
     except Exception as e:
         raise Exception("error while creating folder in cca " + str(e))
     for i in range(0, numLabels):
+        output_img_frame_for_show = binary_image.original_image.frame.copy()
         # if this is the first component then we examine the
         # *background* (typically we would just ignore this
         # component in our loop)
@@ -113,22 +117,39 @@ def cca(preprocessor_runtime, binary_image: Image):
         if area < MIN_CCA_AREA or area > MAX_CCA_AREA:
             continue
         # (cX, cY) = centroids[i]
-        if area < MARGIN_DICT['area_threshold']:
+        if area < MARGIN_DICT['area_threshold_min']:
             margin = MARGIN_DICT['small_area_margin']
-        else:
+        elif area > MARGIN_DICT['area_threshold_max']:
             margin = MARGIN_DICT['large_area_margin']
+        else:
+            margin = 0
         x -= int(margin/2)
         y -= int(margin/2)
         w += margin
         h += margin
         cv2.rectangle(output_img_frame, (x, y), (x + w, y + h), (255, 255, 255), 3)
+        # cv2.rectangle(output_img_frame_for_show, (x, y), (x + w, y + h), (255, 255, 255), 3)
+        print("area ", area, w, h)
+        # show(f'everytime {i} ', output_img_frame_for_show)
         # cv2.circle(output_img, (int(cX), int(cY)), 4, (255, 255, 255), -1)
+        # componentMask = (labels == i).astype("uint8") * 255
+        # cv2.imshow("Connected Component", componentMask)
+        # cv2.waitKey(0)
         
         ## save the crop
         if preprocessor_runtime.should_crop_image:
-            cropped_image_name = crop_images_dir + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
+            # below we sub-classify based on size. so that one can easily look at cropped image and tell if it is big, small or medium
+            middle_folder = 'big'
+            if area < SIZE_AREA_DICT['thresh1']:
+                middle_folder = 'small'
+            elif area < SIZE_AREA_DICT['thresh2']:
+                middle_folder = 'medium'
+            cropped_image_name = crop_images_dir + '/' + middle_folder + '/' + binary_image.original_image.name + '_' + str(bigCount) + '.jpg'
             print('cropped_image_name', cropped_image_name)
             crop = binary_image.original_image.frame[y:y+h,x:x+w]
+            # remove crops which are all zeros
+            if np.all(crop == 0):
+                continue
             failure_count = 0
             try:
                 while not cv2.imwrite(cropped_image_name, crop) and failure_count < 5:

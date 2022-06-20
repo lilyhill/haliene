@@ -35,4 +35,4 @@ Find a smart way to write Constructor which is not leaky on cases to initialize 
 1. Have a varied bounding boxes margin based on the size of the ccaed blob. 
 2. Use overlapping region between the boxes to decide if we should discount some boxes.
 3. Use some dust identification algorithm to reduct dust
-4. We should use some technique to identify exact number of sperms in a blob containing overlapping sperms. 
+4. We should use some technique to identify exact number of sperms in a blob containing overlapping sperms. -> we will just not feed that info

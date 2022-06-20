@@ -1,25 +1,104 @@
 from typing import List
-from utils import show
+from utils import show, resize_and_grayscale
 from Image import Image
 from common_ops import hue_separate, get_dustful, cca
 from morphological import reduce_noise_from_dustful_image, reduce_noise_from_hue_highlighted_image
 from ProcessState import ProcessState
 import cv2
 import os
+import numpy as np
+import random
+random.seed(0)
 
+all_input_images_for_ml = {
+    'degraded': [],
+    'dust': [],
+    'big_halo': [],
+    'medium_halo': [],
+    'small_halo': []
+}
+label_for_input_images_for_ml = {
+
+}
+
+label_list = [
+    'degraded',
+    'dust',
+    'big_halo',
+    'medium_halo',
+    'small_halo'
+]    
 
 class PreProcessor:
-    def __init__(self, input_dir: str, output_dir: str, debug: bool = False, debug_imgname_allowlist: List[str] = [], should_crop_image = True):
-        self.input_dir = input_dir
+    def __init__(self, input_dir: str, output_dir: str, debug: bool = False, debug_imgname_allowlist: List[str] = [], should_crop_image = True, train_or_test = 'train'):
+        self.input_dir = input_dir + '/' + train_or_test
         self.output_dir = output_dir
         self.debug = debug
         self.debug_imgname_allowlist = debug_imgname_allowlist
-        self.mldata_subpath = 'ml_data'
+        self.mldata_subpath = 'ml_data' + '/' + train_or_test
         self.unlabelled_subpath = 'unlabelled'
         self.labelled_subpath = 'labelled'
         self.ccaed_subpath = 'ccaed'
         self.should_crop_image = should_crop_image
+        self.train_or_test = train_or_test
     
+    def fetch_input_for_ml(self):
+        '''
+        read all the folders inside ml_data/train and ml_data/test and use them to label in five classes
+        '''
+        output_dir = os.path.join(self.output_dir, self.mldata_subpath, 'labelled')
+        for dir in os.listdir(output_dir):
+            image_named_dir = os.path.join(output_dir, dir)
+            if not os.path.isdir(image_named_dir):
+                continue
+            for dir_ in os.listdir(image_named_dir):
+                size_dir = os.path.join(image_named_dir, dir_)
+                if not os.path.isdir(size_dir):
+                    continue
+                for dir__ in os.listdir(size_dir):
+                    class_dir = os.path.join(size_dir, dir__)
+                    if not os.path.isdir(class_dir):
+                        continue
+                    for image_file in os.listdir(class_dir):
+                        if image_file == '.DS_Store':
+                            continue
+                        image_file_path = os.path.join(class_dir, image_file)
+                        print("image_file_path", image_file_path)
+                        image_frame = resize_and_grayscale(image_file_path)
+                        print("image_frame", image_frame.shape, image_file_path)
+                        if not os.path.isfile(image_file_path):
+                            continue
+                        if dir__ == 'degraded':
+                            all_input_images_for_ml['degraded'].append(image_frame)
+                        elif dir__ == 'dust':
+                            all_input_images_for_ml['dust'].append(image_frame)
+                        elif dir__ == 'nondegraded':
+                            if dir_ == 'big':
+                                all_input_images_for_ml['big_halo'].append(image_frame)
+                            elif dir_ == 'small':
+                                all_input_images_for_ml['small_halo'].append(image_frame)
+                            elif dir_ == 'medium':
+                                all_input_images_for_ml['medium_halo'].append(image_frame)
+
+        final_list = []
+        for key in all_input_images_for_ml:
+            label_ind = label_list.index(key)
+            all_input_images_for_ml[key] = [(img, label_ind) for img in all_input_images_for_ml[key]]
+            print('all_input_images_for_ml[key]', len(all_input_images_for_ml[key]))
+            final_list.append(all_input_images_for_ml[key])
+        
+        random.shuffle(final_list)
+        # verify shuffle
+        # divide it in two parts
+        # next feed it to ml
+        
+
+                    
+        
+
+            
+        
+
     def should_debug(self, image_name):
         return self.debug and image_name in self.debug_imgname_allowlist
 
