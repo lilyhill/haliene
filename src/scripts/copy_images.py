@@ -47,7 +47,7 @@ def walkdi():
             elif 'degraded' in full_file_path:
                 new_folder_path = os.path.join(CURRPATH,'..','labelled_sorted', 'degraded')
             else:
-                raise Exception('wtf', full_file_path, new_folder_path)
+                continue
             copy_image(full_file_path, new_folder_path)
 
         # for name in dirs:
