@@ -52,7 +52,7 @@ def walkdi():
 
         # for name in dirs:
         #     print(os.path.join(root, name))
-
+## run it from inside labelled
 def main():
     create_new_folders()
     walkdi()

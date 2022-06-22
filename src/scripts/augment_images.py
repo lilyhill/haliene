@@ -33,18 +33,47 @@ def brighten(img_path):
 def identity(_):
     pass
 
-def factor_5_aug(img_path):
-    saturate(img_path)
-    rotate(img_path)
-    rotate(img_path)
-    add_noise(img_path)
-    identity(img_path)
+def factor_4_point_5_aug(img_path):
+    task_list = [
+        saturate,
+        rotate,
+        rotate,
+        add_noise,
+    ]
+    random.shuffle(task_list)
+    if random.random() < 0.5:
+        task_list = task_list[:-1]
+    task_list += [identity]
+    for task in task_list:
+        task(img_path)
 
 
-def factor_3_aug(img_path):
-    saturate(img_path)
-    rotate(img_path)
-    identity(img_path)
+def factor_1_point_5_aug(img_path):
+    task_list = [
+        saturate,
+        rotate,
+        add_noise,
+    ]
+    random.shuffle(task_list)
+    task_list = task_list[:-2]
+    if random.random() < 0.5:
+        task_list = task_list[:-1]
+    task_list += [identity]
+    for task in task_list:
+        task(img_path)
+
+def factor_7_aug(img_path):
+    task_list = [
+        saturate,
+        saturate,
+        rotate,
+        rotate,
+        add_noise,
+        add_noise,
+        identity,
+    ]
+    for task in task_list:
+        task(img_path)
 
 def sample_only(img_path, n):
     head, tail = os.path.split(img_path)
@@ -66,11 +95,11 @@ def sample_only(img_path, n):
 
 
 transform_func = {
-    'dust': (sample_only, [1800]),
-    'degraded': (factor_5_aug, []),
-    'big_halo': (factor_5_aug, []),
-    'small_halo': (identity, []),
-    'medium_halo': (factor_3_aug, [])
+    'dust': (sample_only, [3000]),
+    'degraded': (factor_4_point_5_aug, []),
+    'big_halo': (factor_7_aug, []),
+    'small_halo': (factor_1_point_5_aug, []),
+    'medium_halo': (factor_4_point_5_aug, [])
 }
 
 ## run this from inside labelled_sorted
