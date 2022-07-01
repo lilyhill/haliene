@@ -1,0 +1,635 @@
+{
+  "0": {
+    "healthy": {
+      "tp": 2,
+      "fp": 3,
+      "fn": 0,
+      "tn": 0,
+      "metrics": { "precision": 0.4, "recall": 1.0, "f1": 0.5714285714285715 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 4,
+      "fn": 0,
+      "tn": 0,
+      "metrics": { "precision": 0.2, "recall": 1.0, "f1": 0.33333333333333337 }
+    },
+    "degraded": {
+      "tp": 2,
+      "fp": 3,
+      "fn": 0,
+      "tn": 0,
+      "metrics": { "precision": 0.4, "recall": 1.0, "f1": 0.5714285714285715 }
+    },
+    "metrics": {
+      "macro": { "precision": 0.3333333333333333, "recall": 1.0, "f1": 0.5 },
+      "micro": { "precision": 0.3333333333333333, "recall": 1.0, "f1": 0.5 }
+    }
+  },
+  "5": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.3333333333333333, "recall": 1.0, "f1": 0.5 }
+    },
+    "degraded": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.5555555555555555,
+        "recall": 1.0,
+        "f1": 0.7142857142857143
+      },
+      "micro": {
+        "precision": 0.5555555555555556,
+        "recall": 1.0,
+        "f1": 0.7142857142857143
+      }
+    }
+  },
+  "10": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.3333333333333333, "recall": 1.0, "f1": 0.5 }
+    },
+    "degraded": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "metrics": {
+      "macro": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 },
+      "micro": { "precision": 0.625, "recall": 1.0, "f1": 0.7692307692307693 }
+    }
+  },
+  "15": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.3333333333333333, "recall": 1.0, "f1": 0.5 }
+    },
+    "degraded": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "metrics": {
+      "macro": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 },
+      "micro": { "precision": 0.625, "recall": 1.0, "f1": 0.7692307692307693 }
+    }
+  },
+  "20": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 0.5, "recall": 1.0, "f1": 0.6666666666666666 }
+    },
+    "degraded": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.7222222222222222,
+        "recall": 1.0,
+        "f1": 0.8387096774193548
+      },
+      "micro": {
+        "precision": 0.7142857142857143,
+        "recall": 1.0,
+        "f1": 0.8333333333333333
+      }
+    }
+  },
+  "25": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 0.5, "recall": 1.0, "f1": 0.6666666666666666 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.7222222222222222,
+        "recall": 0.8333333333333334,
+        "f1": 0.7738095238095238
+      },
+      "micro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.8,
+        "f1": 0.7272727272727272
+      }
+    }
+  },
+  "30": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 0.5, "recall": 1.0, "f1": 0.6666666666666666 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.7222222222222222,
+        "recall": 0.8333333333333334,
+        "f1": 0.7738095238095238
+      },
+      "micro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.8,
+        "f1": 0.7272727272727272
+      }
+    }
+  },
+  "35": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 0.5, "recall": 1.0, "f1": 0.6666666666666666 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.7222222222222222,
+        "recall": 0.8333333333333334,
+        "f1": 0.7738095238095238
+      },
+      "micro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.8,
+        "f1": 0.7272727272727272
+      }
+    }
+  },
+  "40": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 0.5, "recall": 1.0, "f1": 0.6666666666666666 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.7222222222222222,
+        "recall": 0.8333333333333334,
+        "f1": 0.7738095238095238
+      },
+      "micro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.8,
+        "f1": 0.7272727272727272
+      }
+    }
+  },
+  "45": {
+    "healthy": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "tn": 2,
+      "metrics": { "precision": 0.6666666666666666, "recall": 1.0, "f1": 0.8 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.5555555555555555,
+        "recall": 0.5,
+        "f1": 0.5263157894736842
+      },
+      "micro": { "precision": 0.6, "recall": 0.6, "f1": 0.6 }
+    }
+  },
+  "50": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715
+      },
+      "micro": { "precision": 0.75, "recall": 0.6, "f1": 0.6666666666666665 }
+    }
+  },
+  "55": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715
+      },
+      "micro": { "precision": 0.75, "recall": 0.6, "f1": 0.6666666666666665 }
+    }
+  },
+  "60": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715
+      },
+      "micro": { "precision": 0.75, "recall": 0.6, "f1": 0.6666666666666665 }
+    }
+  },
+  "65": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715
+      },
+      "micro": { "precision": 0.75, "recall": 0.6, "f1": 0.6666666666666665 }
+    }
+  },
+  "70": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715
+      },
+      "micro": { "precision": 0.75, "recall": 0.6, "f1": 0.6666666666666665 }
+    }
+  },
+  "75": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "tn": 4,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715
+      },
+      "micro": { "precision": 1.0, "recall": 0.6, "f1": 0.7499999999999999 }
+    }
+  },
+  "80": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "tn": 4,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 1,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 0.5, "f1": 0.6666666666666666 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715
+      },
+      "micro": { "precision": 1.0, "recall": 0.6, "f1": 0.7499999999999999 }
+    }
+  },
+  "85": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "tn": 4,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.3333333333333333,
+        "recall": 0.3333333333333333,
+        "f1": 0.3333333333333333
+      },
+      "micro": { "precision": 1.0, "recall": 0.4, "f1": 0.5714285714285715 }
+    }
+  },
+  "90": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "tn": 4,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.3333333333333333,
+        "recall": 0.3333333333333333,
+        "f1": 0.3333333333333333
+      },
+      "micro": { "precision": 1.0, "recall": 0.4, "f1": 0.5714285714285715 }
+    }
+  },
+  "95": {
+    "healthy": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "tn": 3,
+      "metrics": { "precision": 1.0, "recall": 1.0, "f1": 1.0 }
+    },
+    "dust": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "tn": 4,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "degraded": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 2,
+      "tn": 3,
+      "metrics": { "precision": 0.0, "recall": 0.0, "f1": 0.0 }
+    },
+    "metrics": {
+      "macro": {
+        "precision": 0.3333333333333333,
+        "recall": 0.3333333333333333,
+        "f1": 0.3333333333333333
+      },
+      "micro": { "precision": 1.0, "recall": 0.4, "f1": 0.5714285714285715 }
+    }
+  },
+  "accuracy": 0.6
+}

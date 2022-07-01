@@ -1,0 +1,42 @@
+{
+  "/Users/nilinswap/forgit/others/haliene/src/scripts/test/dust/dust.jpg": {
+    "correct_label": "dust",
+    "confidence": {
+      "healthy": 0.4534231,
+      "dust": 0.44819477,
+      "degraded": 0.09838209
+    }
+  },
+  "/Users/nilinswap/forgit/others/haliene/src/scripts/test/healthy/big.jpg": {
+    "correct_label": "healthy",
+    "confidence": {
+      "healthy": 0.986611,
+      "dust": 0.011537336,
+      "degraded": 0.0018516191
+    }
+  },
+  "/Users/nilinswap/forgit/others/haliene/src/scripts/test/healthy/medium.jpg": {
+    "correct_label": "healthy",
+    "confidence": {
+      "healthy": 0.99531484,
+      "dust": 0.003514858,
+      "degraded": 0.0011702776
+    }
+  },
+  "/Users/nilinswap/forgit/others/haliene/src/scripts/test/degraded/degraded.jpg": {
+    "correct_label": "degraded",
+    "confidence": {
+      "dust": 0.733405,
+      "degraded": 0.23180486,
+      "healthy": 0.034790188
+    }
+  },
+  "/Users/nilinswap/forgit/others/haliene/src/scripts/test/degraded/small.jpg": {
+    "correct_label": "degraded",
+    "confidence": {
+      "degraded": 0.8034252,
+      "dust": 0.15128472,
+      "healthy": 0.04529012
+    }
+  }
+}
