@@ -109,7 +109,8 @@ class PreProcessor:
         input_images = os.listdir(self.input_dir) if not self.debug else [f + '.jpg' for f in self.debug_imgname_allowlist]
         for f in input_images:
             img_path = os.path.join(self.input_dir, f)
-            if os.path.isfile(img_path):
+            filepath, ext = os.path.splitext(img_path)
+            if os.path.isfile(img_path) and ext == '.jpg':
                 try:
                     self.preprocess_single(img_path)                
                 except Exception as e:

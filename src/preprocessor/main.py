@@ -7,14 +7,6 @@ INPUT_DIR = IMAGES_DIR + '/input'
 OUTPUT_DIR = IMAGES_DIR + '/output'
 
 DEBUG_IMGNAME_ALLOWLIST=[
-    '20220125_110957',
-    # '20220118_145609',
-    # '20220111_111647',
-    # '20220111_111904',
-    # '20220118_145609',
-    # '20220111_111120',
-    # '20220111_110953',
-    # '20220111_111647'
     ]
 """
 small
@@ -48,9 +40,9 @@ Big
 
 
 def main():
-    preprocessor_runtime = PreProcessor(input_dir=INPUT_DIR, output_dir=OUTPUT_DIR, debug=False, debug_imgname_allowlist=DEBUG_IMGNAME_ALLOWLIST, should_crop_image=True, train_or_test='train')
-    # preprocessor_runtime.preprocess_all()
-    preprocessor_runtime.fetch_input_for_ml()
+    preprocessor_runtime = PreProcessor(input_dir=INPUT_DIR, output_dir=OUTPUT_DIR, debug=False, debug_imgname_allowlist=DEBUG_IMGNAME_ALLOWLIST, should_crop_image=True, train_or_test='test')
+    preprocessor_runtime.preprocess_all()
+    # preprocessor_runtime.fetch_input_for_ml()
 
 if __name__ == '__main__':
     main()

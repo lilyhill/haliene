@@ -85,6 +85,7 @@ def cca(preprocessor_runtime, binary_image: Image):
     bigCount = 0
     print("centroids", centroids, len(centroids))
     crop_images_dir = preprocessor_runtime.get_mldata_unlabelled_dir() + '/' + binary_image.original_image.name
+    print("crop_images_dir", crop_images_dir)
     try:
         os.mkdir(crop_images_dir)
         os.mkdir(crop_images_dir+'/big')
