@@ -2,6 +2,13 @@ from azure.cognitiveservices.vision.customvision.prediction import CustomVisionP
 from msrest.authentication import ApiKeyCredentials
 import os, json
 import numpy as np
+import matplotlib.pyplot as plt
+
+left = 0
+right = 1
+plt.xlim(left, right) # Put x axis ticks every 10 units.
+plt.ylim(left, right)
+plt.autoscale(False)
 
 
 ENDPOINT = "https://southcentralus.api.cognitive.microsoft.com/"
@@ -20,17 +27,20 @@ model_configs = {
     'DFI': {
         'publish_iteration_name': 'testDFI',
         'project_id': 'f9a005cd-2a0a-4875-85f4-a1c61a207ddf',
-        'result_file': 'results_DFI'
+        'result_file': 'results_DFI',
+        'test_dir': '/Users/nilinswap/Documents/ml_data/test/labelled_sorted_new'
     },
     'Merged_Augmented': {
         'publish_iteration_name': 'testDFImergedAug',
         'project_id': 'f99e6ad2-c631-4777-ad02-1ad88a20b773',
-        'result_file': 'results_Merged_Augmented'
+        'result_file': 'results_Merged_Augmented',
+        'test_dir': '/Users/nilinswap/Documents/ml_data/test/labelled_sorted_new_merged'
     },
     'resized_dfi': {
         'publish_iteration_name': 'dfi_resized',
         'project_id': '6bbd3ecb-5929-47a5-a5e0-d12118e42512',
-        'result_file': 'results_dfi_resized'
+        'result_file': 'results_dfi_resized',
+        'test_dir': '/Users/nilinswap/Documents/ml_data/test/labelled_sorted_new'
     }
 }
 
@@ -90,6 +100,7 @@ def test_model(model: str, curr_path: str):
 PROBABILITY_THRESHOLDS = []
 for x in range(0, 100, 5):
     PROBABILITY_THRESHOLDS.append(x)
+PROBABILITY_THRESHOLDS.append(99)
 
 def get_just_a_list_of_classes(results):
     classes = []
@@ -166,7 +177,12 @@ def add_micro_precision_recall_f1(pt_results, classes):
     total_tp = get_conf_mat_sum(pt_results=pt_results, classes=classes, type='tp')
     total_fp = get_conf_mat_sum(pt_results=pt_results, classes=classes, type='fp')
     total_fn = get_conf_mat_sum(pt_results=pt_results, classes=classes, type='fn')
-
+    if total_tp == 0:
+        return {
+            'precision': 0,
+            'recall': 0,
+            'f1': 0,
+        }
     micro_precision = total_tp/(total_fp + total_tp)
     micro_recall = total_tp/(total_fn + total_tp)
     micro_f1 = calc_f1(micro_precision, micro_recall)
@@ -177,6 +193,62 @@ def add_micro_precision_recall_f1(pt_results, classes):
         'f1': micro_f1
     }
 
+
+def just_draw_graphs(final_test_json_path: str, test_json_path: str):
+    with open(final_test_json_path) as tj:
+        final_result = json.load(tj)
+        classes = []
+        with open(test_json_path) as tj:
+            results = json.load(tj)
+            classes = get_just_a_list_of_classes(results) 
+        macro_precisions = []
+        macro_recalls = []
+
+        micro_precisions = []
+        micro_recalls = []
+
+        clas_metrics = {
+            
+        }
+
+        for clas in classes:
+            clas_metrics[clas] = {
+                'precisions': [],
+                'recalls': []
+            }
+
+        for thresh in final_result:
+            if thresh == 'accuracy':
+                continue
+            print("final_result1", final_result[thresh])
+            print("final_result2", final_result[thresh]['metrics'])
+            print("final_result3", final_result[thresh]['metrics']['macro'])
+            macro_precisions.append(final_result[thresh]['metrics']['macro']['precision'])
+            macro_recalls.append(final_result[thresh]['metrics']['macro']['recall'])
+
+            micro_precisions.append(final_result[thresh]['metrics']['micro']['precision'])
+            micro_recalls.append(final_result[thresh]['metrics']['micro']['recall'])
+
+            for clas in classes:
+                clas_metrics[clas]['precisions'].append(final_result[thresh][clas]['metrics']['precision'])
+                clas_metrics[clas]['recalls'].append(final_result[thresh][clas]['metrics']['recall'])
+        #create precision recall curve
+        draw_graph(macro_recalls, macro_precisions, color='purple', name='Macro')
+        draw_graph(micro_recalls, micro_precisions, color='red', name='Micro')
+
+        all_precisions = []
+        all_recalls = []
+        colors = ['blue', 'green', 'red', 'aqua', 'purple']
+        for color, clas in zip(colors, classes):
+            all_precisions.append(clas_metrics[clas]['precisions'])
+            all_recalls.append(clas_metrics[clas]['recalls'])
+            draw_graph(clas_metrics[clas]['recalls'], clas_metrics[clas]['precisions'], color=color, name=clas)
+        draw_graphs_in_one(all_precisions=all_precisions, all_recalls=all_recalls, names = classes)
+
+
+
+        #display plo
+        plt.show()
 
 def calculate_result(test_json_path: str):
     with open(test_json_path) as tj:
@@ -243,11 +315,7 @@ def calculate_result(test_json_path: str):
         # # Print the precision and recall, among other metrics
         # print(metrics.classification_report(ytrue, yprod, digits=3))
 
-        
 
-
-        ## plot graphs
-        
     ## global confusion matrix 
     name, ext = os.path.splitext(test_json_path)
     new_name = name + '_final' + ext
@@ -255,16 +323,38 @@ def calculate_result(test_json_path: str):
         json.dump(final_result, f)
             
                 
+def draw_graph(precisions, recalls, name, color = 'blue'):
+    #create precision recall curve
+    _, ax = plt.subplots()
+    ax.plot(recalls, precisions, color=color)
 
-    
-    
+    #add axis labels to plot
+    ax.set_title(name + ' Precision-Recall Curve')
+    ax.set_ylabel('Precision')
+    ax.set_xlabel('Recall')
 
+def draw_graphs_in_one(all_precisions, all_recalls, names, colors = ['blue', 'green', 'red', 'aqua', 'purple']):
+    #create precision recall curve
+    _, ax = plt.subplots()
+    for precisions, recalls, color, name in zip(all_precisions, all_recalls, colors, names):
+        ax.plot(recalls, precisions, color=color)
+
+    #add axis labels to plot
+    ax.set_title('Precision-Recall Curve')
+    ax.set_ylabel('Precision')
+    ax.set_xlabel('Recall')
 
 if __name__ == '__main__':
-    # test_model('testCV', '/Users/nilinswap/forgit/others/haliene/src/scripts/test')
-    calculate_result(test_json_path='/Users/nilinswap/forgit/others/haliene/src/scripts/test/results_testCV.json')
+    model_name = 'Merged_Augmented'
+    test_dir = model_configs[model_name]['test_dir']
+    test_json_path = test_dir + '/' + model_configs[model_name]['result_file'] + '.json' 
+    # test_model(model_name, test_dir)
+    # calculate_result(test_json_path=test_json_path)
 
-                
+    name, ext = os.path.splitext(test_json_path)
+    final_test_json_path = name + '_final' + ext
+    just_draw_graphs(final_test_json_path=final_test_json_path, test_json_path=test_json_path)
+    
 
 ## Parameters should be clubbed in a dictionary
 ## do something with confusion matrix
