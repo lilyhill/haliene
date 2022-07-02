@@ -17,3 +17,22 @@ just run `python whatever.py`
 
 1. in erosion.py, we first cleared all the living ones and it leaves black holes for living ones. We tried filling it up with inpaint but result is still a blur. (without_living.jpg) 
 
+
+
+## REAL TODOs
+
+1. We are currently creating a lot of image objects and we don't need them. Ideally, there should only be one original image and other image that just changes state and when it changes state it modifies its own frame. We should do it. 
+
+I did it but left a very bad code behind. Please fix it. description is there in main.py
+
+Also should I create new object for image or should I change and return it?
+
+Find a smart way to write Constructor which is not leaky on cases to initialize a valid instance. 
+
+
+## Next Experiments
+
+1. Have a varied bounding boxes margin based on the size of the ccaed blob. 
+2. Use overlapping region between the boxes to decide if we should discount some boxes.
+3. Use some dust identification algorithm to reduct dust
+4. We should use some technique to identify exact number of sperms in a blob containing overlapping sperms. -> we will just not feed that info
