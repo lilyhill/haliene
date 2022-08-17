@@ -1,5 +1,6 @@
 # haliene
 Ai for detecting dna fragmentation index
+Read [Description](https://docs.google.com/document/d/15j_eyn2HjsExRnaAI5P5XI6o7diaMpwqSwyKG90_V_o/edit?usp=sharing)
 
 ## to redo experiments
 
