@@ -11,6 +11,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Dense, Flatten
 
+
 #defining function for building the model
 def create_model(input_shape = (28,28,1)):
     model = keras.Sequential([
@@ -35,18 +36,19 @@ def compile_model(model, optimizer='adam', loss='categorical_crossentropy'):
 def fitting_model(model, x, y, epoch):
     model.fit(x,y, shuffle = True, epochs = epoch)
 
+resize_image_length = 120
 class_size = 5
 
 def main():
     #loading dataset
     (train_X, train_y), (val_X, val_y) = mnist.load_data()
-    print("trainx", train_X[0], train_X.shape, train_X[0].shape)
+    print("trainx", train_X[0], train_X.shape)
     print("trainy", train_y[0], train_y.shape)
 
     print("valx", val_X[0], val_X.shape)
     print("valy", val_y[0], val_y.shape)
 
-
+    # exit()
     #normalizing the dataset
     train_X, val_X = train_X/255, val_X/255
 
